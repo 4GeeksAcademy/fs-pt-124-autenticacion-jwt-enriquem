@@ -1,18 +1,22 @@
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavbarPrivate } from "../pages/navbar/NavbarPrivate";
+import { NavbarGuest } from "../pages/navbar/NavbarGuest";
 
 export const Navbar = () => {
+	const [token, setToken] = useState(localStorage.getItem("user_token"));
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setToken(localStorage.getItem("user_token"));
+		}, 500);
+
+		return () => clearInterval(interval);
+	}, []);
 
 	return (
-		<nav className="navbar navbar-light bg-light">
-			<div className="container">
-				<Link to="/">
-					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
-				</Link>
-				<div className="ml-auto">
-					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
-					</Link>
-				</div>
+		<nav className="main-navbar">
+			<div>
+				{token ? <NavbarPrivate /> : <NavbarGuest />}
 			</div>
 		</nav>
 	);
